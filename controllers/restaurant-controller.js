@@ -1,19 +1,29 @@
 const { Restaurant, Category } = require('../models')
 const restaurantController = {
   getRestaurants: (req, res) => {
-    Restaurant.findAll({
-      include: Category,
-      nest: true,
-      raw: true
-    }).then(restaurants => {
-      const data = restaurants.map(r => ({
-        ...r,
-        description: r.description.substring(0, 50)
-      }))
-      return res.render('restaurants', {
-        restaurants: data
+    const categoryId = Number(req.query.categoryId) || '' // 新增這裡
+    Promise.all([
+      Restaurant.findAll({
+        include: Category,
+        where: { // 新增這裡
+          ...categoryId ? { categoryId } : {}
+        },
+        nest: true,
+        raw: true
+      }),
+      Category.findAll({ raw: true })
+    ])
+      .then(([restaurants, categories]) => {
+        const data = restaurants.map(r => ({
+          ...r,
+          description: r.description.substring(0, 50)
+        }))
+        return res.render('restaurants', {
+          restaurants: data,
+          categories,
+          categoryId // 新增這裡
+        })
       })
-    })
   },
   getRestaurant: (req, res, next) => {
     Restaurant.findByPk(req.params.id, {
