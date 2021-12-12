@@ -15,7 +15,7 @@ router.get('/restaurants', adminController.getRestaurants)
 router.post('/restaurants', upload.single('image'), adminController.postRestaurant) // 修改後台編輯餐廳的路由
 router.get('/categories/:id', categoryController.getCategories)
 router.put('/categories/:id', categoryController.putCategory)
-router.delete('/categories/:id', categoryController.deleteCategory) // 新增這行
+router.delete('/categories/:id', categoryController.deleteCategory)
 router.get('/categories', categoryController.getCategories)
 router.post('/categories', categoryController.postCategory)
 router.get('', (req, res) => res.redirect('/admin/restaurants'))

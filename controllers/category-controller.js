@@ -25,7 +25,7 @@ const categoryController = {
     if (!name) throw new Error('Category name is required!')
     Category.findByPk(req.params.id)
       .then(category => {
-        if (!category) throw new Error("Category doesn’t exist!")
+        if (!category) throw new Error('Category doesn’t exist!')
         return category.update({ name })
       })
       .then(() => res.redirect('/admin/categories'))
